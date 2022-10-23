@@ -1,4 +1,14 @@
 body {
     background-color: #282b30;
     color: white;
+    text-align: center;
+}
+
+#© {
+    font-size: 75%;
+}
+
+#line {
+    margin-left: 35%;
+    margin-right: 35%;
 }

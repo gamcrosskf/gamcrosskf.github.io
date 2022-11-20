@@ -5,177 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="date.js"></script>
     <title>gamcrosskf</title>
 </head>
 <body>
-    <h1>Commandes</h1>
-    <li>Tables ARP : /sbin/arp</li><br>
-    <li>DNS local : cat /etc/resolv.conf</li><br>
-    <li>DNS : resolvectl</li><br>
-    <li>Ping : ping -4 ou -6 (ip)</li><br>
-    <li></li><br>
-
-    <h1>Definitions</h1>
-    <li>Envoyer un email. → SMTP,<br>
-        Consulter une page web. → HTTP,<br>
-        Exécuter des commandes shell une machine distante de manière sécurisée. → SSH,<br>
-        Exécuter des commandes shell sur une machine distante (en clair). → Telnet,<br>
-        Consulter des emails. → IMAP,<br>
-        Tester si une machine est vivante. → ICMP,<br>
-        Trouver l'adresse MAC d'une machine à partir de son adresse IP. → ARP,<br>
-        Transférer des fichiers. → FTP,<br>
-        Trouver une adresse IP à partir du nom d'une machine. → DNS</li><br>
-    <li>ARP : Le protocole ARP permet d'afficher la table ARP. 
-        C'est a dire, de montrer l'identité (les adresse MAC, ethernet) de chacune des machines connue.</li><br>
-    <li>TCP / UDP: TCP : connexion, bout en bout, avec correction d'erreurs (dit fiable) exemple : pour l'envoie de mail.
-        UDP : sans connexion, mais rapide (dit non fiable) exemple : pour les jeu vidéo.
-    </li><br>
-    <li>ISO : Application<br>
-        Présentation<br>
-        Session<br>
-        Transport<br>
-        Réseau<br>
-        Liaison de données<br>
-        Physique<br>
-    </br></li><br>
-    <li>TCP/IP : <br>
-        Application<br>
-        Transport<br>
-        Internet<br>
-        Acces Réseau<br>
-    </li><br>
-
-    <h1>Socket</h1>
-    <li>import socket<br>
-        import sys<br><br>
-
-        def download(host, port, filename):<br>    
-          # création de la socket (TCP/IP) /2<br>
-          s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) <br>
-          # connexion au serveur /2<br>
-          s.connect((host, port)) <br>
-          # requête : envoi du nom du fichier au serveur /2<br>
-          s.sendall(filename.encode())    <br>                        
-          # réponse : boucle de récupération des données du fichier /4<br>
-          while True:  <br>
-            data = s.recv(1024)<br>
-            if data == b"": break<br>
-            print(data.decode(), end="")<br><br>
-
-          # fermeture de la socket /2<br>
-          s.close()</li><br>
-
-          <h1>Socket client : </h1> <br>
-import sys<br>
-import socket<br><br>
-
-try:<br>
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>
-except Exception as e:<br>
-    print("socket error!\nerror : ",e)<br>
-    sys.exit(1)<br><br>
-
-try:<br>
-    HOST = sys.argv[1]<br>
-except Exception as e:<br>
-    print("usage ./httpget host!\nerror : ",e)<br>
-    sys.exit(1)<br><br>
-
-PORT = 80<br><br>
-
-try:<br>
-    s.connect((HOST, PORT))<br>
-except Exception as e:<br>
-    print("connexion failed!\nerror : ",e)<br>
-    sys.exit(1)<br><br>
-
-request = "GET / HTTP/1.1\r\n"  \<br>
-    "Host: " + HOST + "\r\n"    \<br>
-    "Connection: close\r\n\r\n"<br><br>
-
-s.sendall(request.encode("utf-8"))<br><br>
-
-result = s.recv(1024)<br>
-while(result):<br>
-    print(result.decode("utf-8"), end="")<br>
-    result = s.recv(1024)<br><br>
-
-s.close()
-    </li><br>
-
-    <h1>Socket server :</h1><br>
-import sys<br>
-import socket<br>
-import select<br><br>
-
-HOST = ''<br>
-PORT = 7777<br>
-l = []<br><br>
-
-try:<br>
-    s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)<br>
-except Exception as e:<br>
-    print("socket error!\nerror : ",e)<br>
-    sys.exit(1)<br><br>
-
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)<br>
-s.bind((HOST, PORT))<br>
-s.listen(1)<br><br>
-
-while(True):<br>
-    rLists, wLists, xLists = select.select([s]+l, [], [])<br>
-    for element in rLists:<br>
-        if element == s:<br>
-            socketClient, addresse = s.accept()<br>
-            print("Connected by :", nameMachine(socketClient))<br>
-            l.append(socketClient)<br>
-        else:<br>
-            result = element.recv(1024)<br>
-            if result == b'' or result == b'\n':<br>
-                print("Disconnected by :", nameMachine(element))<br>
-                element.close()<br>
-                l.remove(element)<br>
-            else:<br>
-                print("Machine ", nameMachine(element) ," send :", result.decode('utf-8').replace('\n', ''))<br>
-                element.sendall(result)<br>    <br>     
-s.close()
-    </li><br>
-
-    <h1>Socket serveur : </h1> <br>
-import sys<br>
-import socket<br><br>
-
-HOST = ''<br>
-PORT = 7777<br><br>
-
-try:<br>
-    s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)<br>
-except Exception as e:<br>
-    print("socket error!\nerror : ",e)<br>
-    sys.exit(1)<br><br>
-
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)<br>
-s.bind((HOST, PORT))<br>
-s.listen(1)<br><br>
-
-while(True):<br>
-    socketClient, addresse = s.accept()<br>
-    print("Connected by :", addresse[0])<br><br>
-
-    while(True):<br>
-        result = socketClient.recv(1500)<br>
-        if(result == b''):<br>
-            break<br>
-        print("Message (coté server) :", result.decode("utf-8"), end="")<br>
-        socketClient.sendall(result)<br><br>
-    
-    print("Disconnected by :", addresse[0])<br>
-    socketClient.close()<br><br>
-    
-s.close()
-    </li><br>
-    
-    <h1>O</h1>
-    <li></li><br>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Game</a></li>
+        <li style="float:right"><a href="#">gamcrosskf</a></li>
+    </ul>
+    <hr id="firstLine">
+    <div id="main">
+        <h1>Hello World</h1>
+        <button type="button" onclick=date()> Click me to display Date and Time. </button>
+        <p id="date"></p>
+        <hr id="line">
+        <p> <span id="©"> © </span> gamcrosskf - 2022 </p>
+    </div>
 </body>
 </html>
